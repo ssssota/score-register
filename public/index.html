@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Score register</title>
+  <style>
+  
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Score register</h1>
+    </header>
+    <div class="main">
+      <form id="form">
+        <p>楽譜のタイトル</p>
+        <p><input type="text" placeholder="Title" id="title" required></p>
+        <p>タイトルの頭文字（括弧などの記号は除く）</p>
+        <p><input type="text" placeholder="Initial" id="initial" required></p>
+        <p>楽譜を探す際のヒント（英語タイトルの場合日本語読みのものや，別名，課題曲等）</p>
+        <p><input type="text" placeholder="Hint 1" class="hint"></p>
+        <p><input type="text" placeholder="Hint 2" class="hint"></p>
+        <p><input type="text" placeholder="Hint 3" class="hint"></p>
+        <p><input type="text" placeholder="Hint 4" class="hint"></p>
+        <p><input type="text" placeholder="Hint 5" class="hint"></p>
+        <p><input type="submit" value="送信"></p>
+      </form>
+    </div>
+  </div>
+  <script>
+    const $form = document.querySelector('#form')
+    const $title = document.querySelector('#title')
+    const $initial = document.querySelector('#initial')
+    const hints = document.querySelectorAll('.hint')
+
+    $form.addEventListener('submit', ev => {
+      ev.preventDefault()
+
+      const xhr = new XMLHttpRequest()
+      let bodyText = `title=${encodeURIComponent($title.value)}&initial=${encodeURIComponent($initial.value)}`
+      hints.forEach(($e, i) => { if ($e.value !== '') bodyText += `&hint${i+1}=${encodeURIComponent($e.value)}` })
+      xhr.open('POST', '/')
+      xhr.send(bodyText)
+
+      $title.value = ''
+      $initial.value = ''
+      hints.forEach($e => $e.value = '')
+      $title.focus()
+    })
+  </script>
+</body>
+</html>
